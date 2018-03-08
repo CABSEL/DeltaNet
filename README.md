@@ -1,4 +1,4 @@
-# DeltaNeTS
+# DeltaNeT
 <img style = "float: right;" src = "https://github.com/CABSEL/DeltaNeTS/blob/master/image_deltanet.png" width="200" height="200" align="right"> 
 
 DeltaNet is a network analysis tool for predicting genetic perturbations from gene expression data. Given a compendium of gene expression data, DeltaNet generates a perturbation score for each gene in every sample. For a given sample, the magnitude of a gene perturbation scores reflects the confidence that this gene is directly perturbed (for example, by drug or chemical compounds), while the sign reflects the nature of the perturbation (positive for gene induction, negative for gene repression).
