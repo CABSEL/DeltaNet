@@ -28,7 +28,7 @@ Download and unzip the [DeltaNet.zip](https://github.com/CABSEL/DeltaNet/blob/ma
 The information on how to install and use DeltaNet can be found in the [README for MATLAB]().
 
 DeltaNet-R (R version):
-Download and unzip the DeltaNetR.zip (ZIP, 56 KB) file.
+Download and unzip the [DeltaNetR.zip](https://github.com/CABSEL/DeltaNet/blob/master/DeltaNetR.zip) file.
 
 The information on how to install and use DeltaNet-R can be found in the [README for R]().
 
