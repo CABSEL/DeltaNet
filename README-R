@@ -1,0 +1,125 @@
+DeltaNetR version 1.1 (24 June 2016)
+
+The subroutines in the DeltaNetR package (v.1.1) have been successfully tested on R version 3.2.2 and 3.2.3. Please refer to our manuscript titled "Inferring gene targets of drugs and chemical compounds from gene expression profiles" for more detailed information about the algorithm. Any questions regarding DeltaNetR usage can be addressed to heeju.noh@chem.ethz.ch or to rudi.gunawan@chem.ethz.ch.
+
+Remark:
+For parallel computing, please use "deltanet_lar_par.R" and "deltanet_lasso_par.R". 
+
+Acknowledgement:
+We would like to thank Ziyi Hua for creating R version of DeltaNet.
+-----------------------------------------------------------------------------
+
+Installation instruction:
+
+0.  Install R packages: "lars" for DeltaNet-lar, "glmnet", "cvTools" and "methods" for DeltaNet-lasso, and "doParallel" and "foreach" for parallel computing.
+
+1.  Unzip the package DeltaNetR.zip to a preferred folder.
+
+2.  Set or add the DeltaNetR folder path as a current working directory in R.
+
+-----------------------------------------------------------------------------
+
+The DeltaNetR package includes the following:
+
+1. crossvalidate_glmnet_betaA.R:
+     Subroutine for cross validation when running DeltaNet-lasso
+     Prerequisite: "glmnet" and "cvTools" packages and "interp1q.R"
+
+2. crossvalidate_glmnet_betaA_par.R:
+Subroutine for cross validation when running DeltaNet-lasso using parallel computing
+Prerequisite: "glmnet" and "cvTools" packages and "interp1q.R"
+
+3. deltanet_lar.R:
+Subroutine for running DeltaNet-lar
+Prerequisite: "lars" and package
+
+Usage: deltanet_lar(LFC, replist, delta_r)
+
+Arguments:
+LFC: n x m log-2 fold-change gene expression data matrix. The dimensions n and m are the number of genes and samples, respectively.
+
+replist: m x 1 vector of integer indices of sample labels (1,2,3,...,K where K is the number of treatments or experiments). Samples corresponding to replicates of the same treatment should be assigned the same index. For example, replist=[1,1,1,2,2] indicates that the first three samples are replicates from treatment 1, while the last two samples are replicates from treatment 2.
+
+delta_r: A criterion to choose a solution in LAR path, based on sum of squared errors over increasing degrees of freedom (default: 0.10). Any value between 0 and 1 can be used, but we recommend a value between 0.01 and 0.1. Higher values lead to lower accuracy.
+
+
+Value:
+An object of class "dlar" is returned, which is a list of the following matrices.
+
+A: n x n matrix describing the gene regulatory network
+
+P: n x K matrix of treatment effects, where K is the number of treatments. The rows correspond to the genes in the same order as the data matrix LFC. Values in P correspond to the median values of perturbation predictions across the replicates.
+
+R: n x K matrix of gene ranking, where K is the number of treatments. The rows correspond to the genes in the same order as in the data matrix LFC. The rank is determined, based on the absolute values of the columns in P.
+
+4. deltanet_lar_par.R:
+Subroutine for running DeltaNet-lar using parallel computing 
+Prerequisite: "lars", "doParallel", and "foreach" packages
+
+Usage: deltanet_lar_par(LFC, replist, delta_r)
+
+Arguments and return values are the same as deltanet_lar(). Note that the number of cores for parallel computing should be defined beforehand (please see the example code "run_DeltaNet_lar_par.R").
+
+5. deltanet_lasso.R:
+Subroutine for running DeltaNet-lasso
+Prerequisite: "glmnet", "cvTools", and "methods" packages and "crossvalidate_glmnet_betaA.R"
+
+Usage: deltanet_lasso(LFC, lambda, kfold, replist)
+
+Arguments:
+LFC: n x m log-2 fold-change gene expression data matrix. The dimensions n and m are the number of genes and samples, respectively.
+
+lambda (optional): A sequence of regularization parameters. If you do not set lambda, a default lambda sequence is used.
+
+k-fold: number of folds cross validation (CV) for choosing the optimal L1-norm value in Deltanet-lasso. The default value is 10.
+
+replist: m x 1 vector of integer indices of sample labels (1,2,3,...,K where K is the number of treatments or experiments). Samples from replicates of the same treatment should be assigned the same index. For example, replist=[1,1,1,2,2] indicates that the first three samples are replicates from treatment 1, while the last two samples are replicates from treatment 2.
+
+Value:
+An object of class "dlasso" is returned, which is a list of the following matrices.
+
+A: n x n matrix describing the gene regulatory network
+
+P: n x K matrix of treatment effects, where K is the number of treatments. The rows correspond to the genes in the same order as the data matrix LFC. Values in P correspond to the median values of perturbation predictions across the replicates.  
+
+R: n x K matrix of gene ranking, where K is the number of treatments. The rows correspond to the genes in the same order as in the data matrix LFC. The rank is determined, based on the absolute values of the columns in P.
+
+6. deltanet_lasso_par.R
+Subroutine for running DeltaNet-lasso with parallelization
+Prerequisite: "glmnet", "cvTools", "doParallel", "foreach", and "methods" packages and "crossvalidate_glmnet_betaA_par.R"
+
+Usage: deltanet_lasso_par(LFC, lambda, kfold, replist)
+
+Arguments and return values are the same as deltanet_lasso(). Note that the number of cores for parallel computing should be defined beforehand (please see the example code "run_DeltaNet_lasso_par.R").
+
+7. getRankMatrix.R
+Subroutine for calculating averaged estimates in P for the replicates of the same condition and for getting a rank matrix 
+
+8. interp1q.R
+Subroutine for linear interpolation of regularization path, used in Deltanet-lasso.
+
+9. README.txt: This file
+
+10. run_DeltaNet_lar.R: An example script for running DeltaNet-lar
+
+11. run_DeltaNet_lar_par.R: An example script for running DeltaNet-lar using parallel computing
+
+12. run_DeltaNet_lasso.R: An example script for running DeltaNet-lasso
+
+13. run_DeltaNet_lasso_par.R: An example script for running DeltaNet-lasso using parallel computing
+
+14. example_data: A folder containing an example dataset, including
+
+ExpressionData.txt: in-silico gene expression data in log-2 fold change format, consisting of 60 samples from each 3 replicates of 20 single gene knock out experiments in a network of 100 genes. The network is a random subnetwork of yeast reference gene regulatory network in GeneNetWeaver (GNW) program (http://gnw.sourceforge.net/), and gene expression data were simulated by GNW with microarray measurement noise.
+
+GList.txt: A list of genes in the dataset
+
+repList.txt: 60 x 1 vector of integer indices of sample labels for 20 experiments. Samples from replicates of the same treatment were assigned the same index.
+
+sampleList.txt: A list of sample names (60 x 1)
+
+TreatmentList.txt:	A list of experiment names (20 x 1)
+
+-----------------------------------------------------------------------------
+
+Redistribution and use in source and binary forms, with or without modification, are permitted on condition of agreement to the Simplified BSD Style License.
