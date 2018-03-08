@@ -30,7 +30,7 @@ The information on how to install and use DeltaNet can be found in the [README f
 DeltaNet-R (R version):
 Download and unzip the [DeltaNetR.zip](https://github.com/CABSEL/DeltaNet/blob/master/DeltaNetR.zip) file.
 
-The information on how to install and use DeltaNet-R can be found in the [README for R]().
+The information on how to install and use DeltaNet-R can be found in the [README for R](https://github.com/CABSEL/DeltaNet/blob/master/README-R).
 
 ### Acknowledgements
 This work has been supported by the ETH Zurich Research Grant. We would like to thank S.M. Minhaz Ud-Dean for providing useful suggestions and for supporting the computing environment and maintenance.
