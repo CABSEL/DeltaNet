@@ -23,7 +23,7 @@ Redistribution and use in source and binary forms, with or without modification,
 
 ### Download and installation
 DeltaNet (MATLAB version):
-Download and unzip the DeltaNet.zip (ZIP, 16.1 MB) file.
+Download and unzip the [DeltaNet.zip](https://github.com/CABSEL/DeltaNet/blob/master/DeltaNet.zip) file.
 
 The information on how to install and use DeltaNet can be found in the [README for MATLAB]().
 
