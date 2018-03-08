@@ -25,7 +25,7 @@ Redistribution and use in source and binary forms, with or without modification,
 DeltaNet (MATLAB version):
 Download and unzip the [DeltaNet.zip](https://github.com/CABSEL/DeltaNet/blob/master/DeltaNet.zip) file.
 
-The information on how to install and use DeltaNet can be found in the [README for MATLAB]().
+The information on how to install and use DeltaNet can be found in the [README for MATLAB](https://github.com/CABSEL/DeltaNet/blob/master/README-MATLAB).
 
 DeltaNet-R (R version):
 Download and unzip the [DeltaNetR.zip](https://github.com/CABSEL/DeltaNet/blob/master/DeltaNetR.zip) file.
