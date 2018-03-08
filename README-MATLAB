@@ -1,0 +1,237 @@
+DeltaNet version 1.1 (17 February 2016)
+
+
+
+The subroutines in the DeltaNet package (v.1.1) have been successfully tested on MATLAB 2014b and 2015a platforms. Please refer to our manuscript titled "Direct inference of gene targets of drugs and chemical compounds from gene expression profiles" for more detailed information about the algorithm. Any questions regarding DeltaNet usage can be addressed to heeju.noh@chem.ethz.ch or to rudi.gunawan@chem.ethz.ch.
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+Installation instruction:
+
+
+
+0.  Download and install SpaSM from http://www2.imm.dtu.dk/projects/spasm (tested using the version on 24.10.2012) and GLMNET from http://web.stanford.edu/~hastie/glmnet_matlab/download.html
+
+
+
+1.  Unzip the package DeltaNet.zip to a preferred folder.
+
+
+
+2.  Move SpaSM and GLMNET packages to DeltaNet folder and unzip spasm.zip and glmnet_matlab.zip.
+
+
+
+3.  Set or add the DeltaNet folder path as a current working directory in MATLAB.
+
+
+
+4.  Add folder paths of SpaSM and GLMNET packages (e.g. using addpath() function in Matlab) if the packages are under separate folders.
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+The DeltaNet package includes the following:
+
+
+
+1.	center.m: 
+
+A MATLAB subroutine for the matrix centering
+
+
+
+
+
+2.	crossvalidate_glmnet_betaA.m:
+
+A MATLAB subroutine for running DeltaNet-LASSO when using cross validation
+
+Prerequisite: GLMNET toolbox and MATLAB Parallel Computing toolbox
+
+
+
+
+
+3.	deltanet_lar.m:
+
+A MATLAB subroutine for running DeltaNet-LAR 
+
+Prerequisite: deltanet_lar_sw.m, lar_dr.m, SpaSM toolbox and MATLAB Parallel Computing toolbox (only for parallel calculations)
+
+
+
+Usage:   [rankMatrix, Puni, A] = deltaNet_lar(lfc, delta_r, numWorkers, replist)
+
+
+
+Arguments:
+
+lfc: n x m log-2 fold-change gene expression data matrix. The dimensions n and m are the number of genes and samples, respectively.
+
+delta_r (optional): stopping criterion for LAR (default: 0.1). Any value between 0 and 1 can be used, but we recommend a value between 0.01 and 0.1. Higher values lead to shorter computational times at the cost of lower accuracy.
+
+numWorkers (optional): the number of MATLAB workers for parallel computation. Setting NumWorkers=1 or NumWorkers=[] turns off parallelization.
+
+replist (optional): m x 1 vector of integer indices of sample labels (1,2,3,...,K where K is the number of treatments or experiments). Samples from replicates of the same treatment should be assigned the same index. For example, replist=[1,1,1,2,2] indicates that the first three samples are replicates from treatment 1, while the last two samples are replicates from treatment 2.
+
+
+
+Outputs:
+
+rankMatrix: n x K matrix of gene ranking, where K is the number of treatments. The rows correspond to the genes in the same order as in the data matrix lfc. The rank is determined, based on the absolute values of the columns in Puni. K is the 
+
+Puni: n x K matrix of gene ranking, where K is the number of treatments. The rows correspond to the genes in the same order as the data matrix lfc. Values in Puni correspond to the median values of perturbation predictions across the replicates.  
+
+A: n x n matrix describing the gene regulatory network
+
+
+
+
+
+4.	deltanet_lar_sw.m:
+
+A MATLAB subroutine for running DeltaNet-LAR on a single worker.
+
+Prerequisite: lar_dr.m
+
+
+
+
+
+5.	deltanet_lasso.m:
+
+A MATLAB subroutine for running DeltaNet-LASSO
+
+Prerequisite: GLMNET toolbox and MATLAB Parallel Computing toolbox (only for parallel calculations)
+
+
+
+Usage: [rankMatrix, Puni, A] = deltanet_lasso(lfc, lambda, kfold, numWorkers, replist)
+
+
+
+Arguments:
+
+lfc: n x m log-2 fold-change gene expression data matrix. The dimensions n and m are the number of genes and samples, respectively.
+
+lambda (optional): A set of regularization parameters. If you do not set lambda, a default lambda set is used.
+
+k-fold (optional): number of folds cross validation (CV) for choosing the optimal L1-norm value for Lasso regression. The default value is 10.numWorkers: the number of MATLAB workers for parallel computing. If you do not want to use parallel computing, please set NumWorkers=1 or NumWorkers=[].
+
+replist (optional): m x 1 vector of integer indices of sample labels (1,2,3,...,K where K is the number of treatments or experiments). Samples from replicates of the same treatment should be assigned the same index. For example, replist=[1,1,1,2,2] indicates that the first three samples are replicates from treatment 1, while the last two samples are replicates from treatment 2.
+
+
+
+Outputs:
+
+rankMatrix: n x K matrix of gene ranking, where K is the number of treatments. The rows correspond to the genes in the same order as in the data matrix lfc. The rank is determined, based on the absolute values of the columns in Puni. K is the 
+
+Puni: n x K matrix of gene ranking, where K is the number of treatments. The rows correspond to the genes in the same order as the data matrix lfc. Values in Puni correspond to the median values of perturbation predictions across the replicates.  
+
+A: n x n matrix describing the gene regulatory network
+
+
+
+
+
+6.	lar_dr.m: A MATLAB function for Least Angle Regression (LAR). The subroutine is a modification of LAR available in SpaSM, with a stopping criterion delta_r. This file is distributed with permission from Dr. Karl Sjöstrand. 
+
+
+
+
+
+7.	rankGenes.m: A MATLAB subroutine to display the result of gene rankings from rankMatrix.
+
+
+
+Usage: result_table = rankGenes(rankMatrix, Puni, TreatmentID, GeneList, TreatmentList)
+
+
+
+Arguments: 
+
+rankMatrix: output of deltanet_lasso() or deltaNet_LAR().
+
+Puni: output of deltanet_lasso() or deltaNet_LAR().
+
+TreatmentID (optional): indices of treatments or experiments. If you do not set TreatmentID, the table will display for all treatment or experiment conditions.
+
+GeneList (optional): a column cell array of the gene/transcript list. The array length should equal to the number of rows in rankMatrix. If GeneList is not provided, then genes will be numbered according to their row indices in rankMatrix. 
+
+TreatmentList (optional): a row cell array of the treatment or experiment list. The array length should equal to the number of selected treatments or experiments (=the length of TreatmentID).
+
+
+
+Outputs:
+
+A table of gene rankings for the (selected) treatments. For each treatment, the output shows three columns: ranks (left) , gene labels (middle), and perturbation coefficients (right). The sign of perturbation coefficients indicates ÒinductionÓ for positive and ÒinhibitionÓ for negative.
+
+
+
+
+
+8.	README.txt: This file
+
+
+
+
+
+9.	standardize.m: A MATLAB subroutine for the matrix normalization (zero-mean and unit L2-norm column vectors).
+
+
+
+
+
+10.	example_data: A folder containing example datasets, including
+
+Data_Ecoli_4217genes_524samples.mat: log-2 fold-change gene expression data for E. coli. The data originated from the Many Microbe Microarrays Database (M3D, as of 29th October 2007) (http://m3d.mssm.edu) and has been pre-processed as described in DeltaNet publication manuscript.
+
+Data_simulated_100genes_XXsamples.mat: log-2 fold-change gene expression data for 100 gene network. The data were simulated using GeneNet eaver (http://gnw.sourceforge.net/) using a random subnetwork of yeast reference gene regulatory network. A list of genes that were knocked-down is also included. The value XX indicates the number of samples. 
+
+
+
+
+
+11.	run_DeltaNet_LAR_example_Ecoli.m: An example script for running DeltaNet-LAR using E. coli dataset.
+
+
+
+
+
+12.	run_DeltaNet_LAR_example_simulated_data.m: An example script for running DeltaNet-LAR using simulated dataset.
+
+
+
+
+
+13. run_DeltaNet_LASSO_example_Ecoli.m: An example script for running DeltaNet-LASSO with parallelization using E. coli dataset.
+
+
+
+
+
+14. run_DeltaNet_LASSO_example_simulated_data.m: An example script for running DeltaNet-LASSO with parallelization using simulated dataset.
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+Redistribution and use in source and binary forms, with or without modification, are permitted on condition of agreement to the Simplified BSD Style License.
+
+
